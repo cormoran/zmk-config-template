@@ -77,3 +77,5 @@ jobs:
             --latest \
             --target ${{ github.sha }} \
             artifacts/*.uf2
+        env:
+            GH_TOKEN: ${{ github.token }}
