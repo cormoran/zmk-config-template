@@ -10,6 +10,9 @@ on:
       release:
         description: "Create a release artifact with given version"
         required: true
+  schedule:
+    # 20:00 JST every Friday (11:00 UTC)
+    - cron: '0 11 * * 5'
 
 jobs:
   build:
@@ -79,3 +82,20 @@ jobs:
             artifacts/*.uf2
         env:
             GH_TOKEN: ${{ github.token }}
+
+  # Avoid deactivating scheduled runs by keeping the workflow active
+  keepalive:
+    if: github.event_name == 'schedule'
+    permissions:
+        actions: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Re-enable workflow to avoid deactivating scheduled runs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_REPO: ${{ github.repository }}
+        run: |
+          gh workflow enable zmk-module.yml
