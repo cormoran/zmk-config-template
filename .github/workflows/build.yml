@@ -98,4 +98,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_REPO: ${{ github.repository }}
         run: |
-          gh workflow enable zmk-module.yml
+          gh workflow enable build.yml
